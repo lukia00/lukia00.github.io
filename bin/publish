@@ -32,6 +32,15 @@ cmd_prepare() {
   [ "$(head -1 "$draft")" = "---" ] || die "Front Matter(---)로 시작하지 않습니다: $name"
   awk 'NR>1 && /^---$/ {exit} /^title: *[^ ]/ {found=1} END {exit !found}' "$draft" \
     || die "Front Matter에 title이 없습니다: $name"
+  # Jekyll silently drops future-dated posts, so the build "succeeds" with no post.
+  local fm_date
+  fm_date=$(awk 'NR>1 && /^---$/ {exit} /^date:/ {sub(/^date: */, ""); print}' "$draft")
+  if [ -n "$fm_date" ]; then
+    local ts
+    ts=$(date -j -f "%Y-%m-%d %H:%M:%S %z" "$fm_date" +%s 2>/dev/null) \
+      || die "date 형식을 읽을 수 없습니다 (YYYY-MM-DD HH:MM:SS +0900): $fm_date"
+    [ "$ts" -le "$(date +%s)" ] || die "date가 미래입니다 ($fm_date). 미래 글은 게시되지 않습니다"
+  fi
 
   mkdir -p "$BLOG/_posts"
   cp "$draft" "$BLOG/_posts/$name"
