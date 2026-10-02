@@ -1,0 +1,22 @@
+title: lukia
+description: bz
+url: "https://lukia00.github.io"
+lang: ko
+timezone: Asia/Seoul
+theme: minima
+github_username: lukia00
+
+plugins:
+  - jekyll-feed
+  - jekyll-seo-tag
+
+defaults:
+  - scope:
+      path: ""
+      type: posts
+    values:
+      layout: post
+
+exclude:
+  - bin
+  - README.md
