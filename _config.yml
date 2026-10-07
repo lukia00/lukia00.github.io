@@ -3,10 +3,11 @@ description: bz
 url: "https://lukia00.github.io"
 lang: ko
 timezone: Asia/Seoul
-theme: minima
+remote_theme: knhash/jekyllBear@e9fc243
 github_username: lukia00
 
 plugins:
+  - jekyll-remote-theme
   - jekyll-feed
   - jekyll-seo-tag
 
@@ -16,6 +17,19 @@ defaults:
       type: posts
     values:
       layout: post
+      tags: [all]
+  - scope:
+      path: ""
+      type: my_tags
+    values:
+      layout: tagged
+
+collections:
+  my_tags:
+    output: true
+    permalink: /tagged/:slug/
+
+Blog: /blog
 
 exclude:
   - bin
